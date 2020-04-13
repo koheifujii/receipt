@@ -71,6 +71,7 @@ export interface ReceiptResponse {
   receipt: Receipt
 }
 
+
 class FreeeApi {
   /**
    * GET /users/me
@@ -110,13 +111,9 @@ class FreeeApi {
     companyId: string,
     params: any
   ): Promise<ReceiptResponse> {
-    return this.post<ReceiptResponse>(
-      userId,
-      companyId,
-      'api/1/receipts',
-      params
-    )
+    return this.post<ReceiptResponse>(userId, companyId, 'api/1/receipts', params)
   }
+
 
   private post<T = any>(
     userId: string,

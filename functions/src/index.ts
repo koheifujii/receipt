@@ -24,7 +24,7 @@ exports.postDeal = baseFunction
     return FreeeAPI.postDeal(userId, companyId, params)
   })
 
-exports.postReceipt = baseFunction
+  exports.postReceipt = baseFunction
   .runWith({ timeoutSeconds: 180 })
   .https.onCall((data: any) => {
     const { userId, companyId, params } = data
