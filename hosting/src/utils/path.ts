@@ -1,7 +1,7 @@
 export const DEFAULT_LOCAL_FUNCTIONS_HOST = 'http://localhost:5001'
 
 export function getRedirectUrl() {
-  const host =   getDefaultFunctionsHost() /* process.env.CLOUD_FUNCTION_HOST ||*/
+  const host = getDefaultFunctionsHost() /* process.env.CLOUD_FUNCTION_HOST ||*/
   return host + '/api/auth/redirect'
 }
 
@@ -11,7 +11,7 @@ function getDefaultFunctionsHost() {
   if (isProduction()) {
     return `https://${region}-${projectId}.cloudfunctions.net`
   } else {
-    return  `https://${region}-${projectId}.cloudfunctions.net`  //`${getFunctionsLocalHost()}/${projectId}/${region}`
+    return `https://${region}-${projectId}.cloudfunctions.net` //`${getFunctionsLocalHost()}/${projectId}/${region}`
   }
 }
 

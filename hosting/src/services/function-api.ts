@@ -24,7 +24,7 @@ class FunctionApi {
   }
 
   async postReceipt(userId: string, companyId: string, params: any) {
-    console.log(" postreceipt function作動 from function-api.tsです。")
+    console.log(' postreceipt function作動 from function-api.tsです。')
     const response = await firebaseUtils.function('postReceipt', {
       userId,
       companyId,

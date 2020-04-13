@@ -2,7 +2,7 @@ import { parse } from 'querystring'
 import { FunctionAPI } from './services/function-api'
 import { getRedirectUrl } from './utils/path'
 //import { firebase } from '../node_modules/@firebase/app/dist/index'
-import * as JSZip from 'jszip';
+import * as JSZip from 'jszip'
 //import { saveAs } from 'file-saver';
 // tslint:disable-next-line:no-import-side-effect
 import './main.css'
@@ -45,7 +45,6 @@ class Demo {
     { id: 'expense', name: '支出' }
   ]
   private receiptImage: any[]
-
 
   constructor() {
     window.addEventListener('DOMContentLoaded', async () => {
@@ -110,7 +109,6 @@ class Demo {
       'click',
       this.onPostReceiptButtonClick.bind(this)
     )
-
   }
 
   private async onAuthStateChanged(user: firebase.User) {
@@ -177,16 +175,19 @@ class Demo {
       receipt: this.getReceipt()
     }
     const params = receipt
-    console.log('レシートはこれです'+receipt)
-    
-    const receiptResponse = await FunctionAPI.postReceipt(userId, companyId, params)
+    console.log('レシートはこれです' + receipt)
+
+    const receiptResponse = await FunctionAPI.postReceipt(
+      userId,
+      companyId,
+      params
+    )
     if (receiptResponse.receipt) {
       alert('Succeed posting deal: \n\n' + JSON.stringify(receiptResponse))
     } else {
       alert('Failed to post deal: \n\n' + JSON.stringify(receiptResponse))
     }
   }
-
 
   private async login(user: firebase.User) {
     this.lastUid = user.uid
@@ -295,42 +296,43 @@ class Demo {
 
   private getDescription() {
     //if (this.amountInputSection.value) {
-      return 'テスト'//parseInt(this.amountInputSection.value, 10)
+    return 'テスト' //parseInt(this.amountInputSection.value, 10)
     //}
     return 0
   }
 
   private getReceipt() {
     if (this.amountInputSection.value) {
+      //var receiptImage = [] ;
+      var saved_id = document.getElementById('saved')
+      if (saved_id != null) {
+        var cnt = saved_id.childElementCount
 
-    //var receiptImage = [] ;
-    var saved_id = document.getElementById( "saved" ) ;
-    if(saved_id != null){
-    var cnt = saved_id.childElementCount ;
-    
-    //var zipData = new JSZip();
+        //var zipData = new JSZip();
 
-    
-    for( let i = 1;i<= cnt;i++){
-     // console.log(i+'個目のレシートデータです。'  )
-     var receipt_canvas = document.getElementById("receipt" + i) as HTMLCanvasElement;
-     this.receiptImage[i] = receipt_canvas.toDataURL('image/png').replace(/^.*,/, '');
-     // zipData.file("receipt" + i + ".png", this.receiptImage[i], {
-         //   base64: true
-       // });
-    }
+        for (let i = 1; i <= cnt; i++) {
+          // console.log(i+'個目のレシートデータです。'  )
+          var receipt_canvas = document.getElementById(
+            'receipt' + i
+          ) as HTMLCanvasElement
+          this.receiptImage[i] = receipt_canvas
+            .toDataURL('image/png')
+            .replace(/^.*,/, '')
+          // zipData.file("receipt" + i + ".png", this.receiptImage[i], {
+          //   base64: true
+          // });
+        }
 
-    /*zipData.generateAsync({
+        /*zipData.generateAsync({
                 type: "blob"
             })
             .then(function(content) {
                 saveAs(content, "icons.zip");
             });
             */
-  
 
-      return this.receiptImage[1]
-          }
+        return this.receiptImage[1]
+      }
     }
     return 0
   }
