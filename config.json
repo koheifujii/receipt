@@ -1,9 +1,9 @@
 {
     "freee": {
-        "clientId": "",
-        "clientSecret": ""
+        "clientId": "deb35b3d4753ec4bd25ff920c72309a4664cfc69aa7447af474af07997126741",
+        "clientSecret": "32acf7c7e2208e6fdafd42de4628801d8212d2abcb537d5ab81b4ad7818cc817"
     },
     "firebase": {
-        "apiKey": ""
+        "apiKey": "AIzaSyDfuEUFe8hPCYAiXd9aHGh_NgdxsVICmOE"
     }
 }

@@ -9,7 +9,7 @@ import * as functions from 'firebase-functions'
 
 const env = functions.config().env
 const config = require(`../config/config.${
-  env && env.mode ? env.mode : 'local'
+  env && env.mode ? env.mode : 'production'
 }.json`)
 
 const serviceAccount = env.serviceaccountpath

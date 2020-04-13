@@ -59,6 +59,19 @@ export interface Detail {
   id: number // TODO add fields
 }
 
+//fujiji加筆
+export interface Receipt {
+  company_id: number
+  description: number
+  issue_date: string
+  receipt: string
+}
+
+export interface ReceiptResponse {
+  receipt: Receipt
+}
+
+
 class FreeeApi {
   /**
    * GET /users/me
@@ -93,6 +106,15 @@ class FreeeApi {
     return this.post<DealResponse>(userId, companyId, 'api/1/deals', params)
   }
 
+  async postReceipt(
+    userId: string,
+    companyId: string,
+    params: any
+  ): Promise<ReceiptResponse> {
+    return this.post<ReceiptResponse>(userId, companyId, 'api/1/receipts', params)
+  }
+
+
   private post<T = any>(
     userId: string,
     companyId: string,
@@ -109,7 +131,7 @@ class FreeeApi {
       .then(response => response.data)
       .catch(error => {
         console.error(`Error occured for posting ${path}:`, error.response)
-        return error.response.data as any // TODO return proper response
+        return false as any //error.response.data as any // TODO return proper response
       })
   }
 }

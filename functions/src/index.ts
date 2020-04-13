@@ -24,6 +24,13 @@ exports.postDeal = baseFunction
     return FreeeAPI.postDeal(userId, companyId, params)
   })
 
+  exports.postReceipt = baseFunction
+  .runWith({ timeoutSeconds: 180 })
+  .https.onCall((data: any) => {
+    const { userId, companyId, params } = data
+    return FreeeAPI.postReceipt(userId, companyId, params)
+  })
+
 exports.keyRotation = baseFunction.pubsub
   .schedule('0 0 28 * *')
   .onRun(async () => {

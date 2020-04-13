@@ -1,6 +1,9 @@
 import { parse } from 'querystring'
 import { FunctionAPI } from './services/function-api'
 import { getRedirectUrl } from './utils/path'
+//import { firebase } from '../node_modules/@firebase/app/dist/index'
+import * as JSZip from 'jszip';
+//import { saveAs } from 'file-saver';
 // tslint:disable-next-line:no-import-side-effect
 import './main.css'
 
@@ -13,6 +16,8 @@ class Demo {
   private uidContainer: HTMLElement
   private signOutButton: HTMLElement
   private postDealButton: HTMLElement
+  private postReceiptButton: HTMLElement
+
   private companiesSelectItems: HTMLCollectionOf<Element>
   private companiesSelectInput: HTMLInputElement
   private companiesSelect: HTMLElement
@@ -39,6 +44,8 @@ class Demo {
     { id: 'income', name: '収入' },
     { id: 'expense', name: '支出' }
   ]
+  private receiptImage: any[]
+
 
   constructor() {
     window.addEventListener('DOMContentLoaded', async () => {
@@ -59,6 +66,8 @@ class Demo {
     this.uidContainer = document.getElementById('demo-uid-container')!
     this.signOutButton = document.getElementById('demo-sign-out-button')!
     this.postDealButton = document.getElementById('demo-post-deal-button')!
+    this.postReceiptButton = document.getElementById('post-receipt-button')!
+
     this.companiesSelectItems = document.getElementsByClassName(
       'mdl-menu__item'
     )
@@ -97,6 +106,11 @@ class Demo {
       'click',
       this.onPostDealButtonClick.bind(this)
     )
+    this.postReceiptButton.addEventListener(
+      'click',
+      this.onPostReceiptButtonClick.bind(this)
+    )
+
   }
 
   private async onAuthStateChanged(user: firebase.User) {
@@ -148,6 +162,31 @@ class Demo {
       alert('Failed to post deal: \n\n' + JSON.stringify(dealResponse))
     }
   }
+
+  private async onPostReceiptButtonClick() {
+    const companyId = this.currentCompanyId
+    const userId = firebase.auth().currentUser!.uid
+    const issue_date = new Date()
+    const issue_date_month = ('0' + (issue_date.getMonth() + 1)).slice(-2)
+    const issue_date_day = ('0' + issue_date.getDate()).slice(-2)
+    const issue_date_str =
+      issue_date.getFullYear() + '-' + issue_date_month + '-' + issue_date_day
+    const receipt = {
+      issue_date: issue_date_str,
+      description: this.getDescription(), //あとで作る
+      receipt: this.getReceipt()
+    }
+    const params = receipt
+    console.log('レシートはこれです'+receipt)
+    
+    const receiptResponse = await FunctionAPI.postReceipt(userId, companyId, params)
+    if (receiptResponse.receipt) {
+      alert('Succeed posting deal: \n\n' + JSON.stringify(receiptResponse))
+    } else {
+      alert('Failed to post deal: \n\n' + JSON.stringify(receiptResponse))
+    }
+  }
+
 
   private async login(user: firebase.User) {
     this.lastUid = user.uid
@@ -250,6 +289,48 @@ class Demo {
   private getAmountValue() {
     if (this.amountInputSection.value) {
       return parseInt(this.amountInputSection.value, 10)
+    }
+    return 0
+  }
+
+  private getDescription() {
+    //if (this.amountInputSection.value) {
+      return 'テスト'//parseInt(this.amountInputSection.value, 10)
+    //}
+    return 0
+  }
+
+  private getReceipt() {
+    if (this.amountInputSection.value) {
+
+    //var receiptImage = [] ;
+    var saved_id = document.getElementById( "saved" ) ;
+    if(saved_id != null){
+    var cnt = saved_id.childElementCount ;
+    
+    //var zipData = new JSZip();
+
+    
+    for( let i = 1;i<= cnt;i++){
+     // console.log(i+'個目のレシートデータです。'  )
+     var receipt_canvas = document.getElementById("receipt" + i) as HTMLCanvasElement;
+     this.receiptImage[i] = receipt_canvas.toDataURL('image/png').replace(/^.*,/, '');
+     // zipData.file("receipt" + i + ".png", this.receiptImage[i], {
+         //   base64: true
+       // });
+    }
+
+    /*zipData.generateAsync({
+                type: "blob"
+            })
+            .then(function(content) {
+                saveAs(content, "icons.zip");
+            });
+            */
+  
+
+      return this.receiptImage[1]
+          }
     }
     return 0
   }
